@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
@@ -34,6 +35,22 @@ public class RestaurantController {
 
     @GetMapping("/{id}")
     public RestaurantResponse findById(@PathVariable Long id) { return service.findById(id); }
+
+
+    @GetMapping("/search/category")
+    public List<RestaurantResponse> searchByCategory(@RequestParam String category) {
+        return service.searchByCategory(category);
+    }
+
+    @GetMapping("/search/rating")
+    public List<RestaurantResponse> searchByRating(@RequestParam double min, @RequestParam double max) {
+        return service.searchByRating(min, max);
+    }
+
+    @GetMapping("/search/top")
+    public List<RestaurantResponse> searchTopRated(@RequestParam String category) {
+        return service.searchTopRated(category);
+    }
 
     @PutMapping("/{id}")
     public RestaurantResponse update(@PathVariable Long id, @Valid @RequestBody RestaurantRequest request) {

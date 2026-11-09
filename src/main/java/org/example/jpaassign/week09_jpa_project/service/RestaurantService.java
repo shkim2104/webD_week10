@@ -20,7 +20,7 @@ public class RestaurantService {
     }
 
     public RestaurantResponse create(RestaurantRequest request) {
-        Restaurant saved = repository.save(new Restaurant(request)); // INSERT
+        Restaurant saved = repository.save(new Restaurant(request));
         return RestaurantResponse.from(saved);
     }
 
@@ -32,10 +32,22 @@ public class RestaurantService {
         return RestaurantResponse.from(findEntity(id));
     }
 
+    public List<RestaurantResponse> searchByCategory(String category) {
+        return repository.findByCategory(category).stream().map(RestaurantResponse::from).toList();
+    }
+
+    public List<RestaurantResponse> searchByRating(double min, double max) {
+        return repository.findByRatingBetween(min, max).stream().map(RestaurantResponse::from).toList();
+    }
+
+    public List<RestaurantResponse> searchTopRated(String category) {
+        return repository.findByCategoryOrderByRatingDesc(category).stream().map(RestaurantResponse::from).toList();
+    }
+
     public RestaurantResponse update(Long id, @Valid RestaurantRequest request) {
         Restaurant restaurant = findEntity(id);
         restaurant.update(request);
-        // Week 09: explicitly save (Week 10 changes this to Dirty Checking).
+
         return RestaurantResponse.from(repository.save(restaurant));
     }
 
